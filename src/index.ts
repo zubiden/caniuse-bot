@@ -1,9 +1,13 @@
-import { Bot, InlineKeyboard } from "grammy";
+import { Bot, GrammyError, InlineKeyboard } from "grammy";
 import { BOT_TOKEN, CACHE_TIME, CAN_I_USE_URL, MINIMUM_QUERY_LENGTH, RESULT_LIMIT } from "./config.ts";
 import { search } from "./caniuse.ts";
 import { buildArticle, prepareWebAppUrl } from "./builders.ts";
 
 const bot = new Bot(BOT_TOKEN);
+
+bot.catch((err) => {
+    console.error(err);
+});
 
 bot.on("message", (ctx) => {
     if (ctx.message.via_bot) return;
@@ -21,7 +25,7 @@ bot.on("inline_query", async (ctx) => {
         ctx.answerInlineQuery(
             [],
             { cache_time: CACHE_TIME },
-        );
+        ).catch();
     }
 
     if (!query || query.length < MINIMUM_QUERY_LENGTH) {
@@ -37,7 +41,7 @@ bot.on("inline_query", async (ctx) => {
 
     const results = features.slice(0, RESULT_LIMIT).map(buildArticle);
 
-    await ctx.answerInlineQuery(
+    ctx.answerInlineQuery(
         results,
         {
             cache_time: CACHE_TIME,
@@ -49,10 +53,6 @@ bot.on("inline_query", async (ctx) => {
             }
         },
     );
-});
-
-bot.catch((err) => {
-    console.error(err);
 });
 
 bot.start();

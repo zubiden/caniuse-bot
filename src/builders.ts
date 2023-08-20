@@ -1,10 +1,13 @@
 import { InlineKeyboard, InlineQueryResultBuilder } from "grammy";
 import removeMarkdown from "remove-markdown";
 import { BROWSER_MAP, BrowserSupport, Feature, getBrowserSupportPercent, getSupportInfo } from "./caniuse.ts";
-import { CAN_I_USE_URL, WEB_APP_ESCAPE } from "./config.ts";
+import { CAN_I_USE_URL, WEB_APP_URL } from "./config.ts";
 
 export function buildArticle(feature: Feature) {
-    const keyboard = new InlineKeyboard().url("Open on caniuse.com", CAN_I_USE_URL + feature.id);
+    const keyboard = new InlineKeyboard()
+        .url("Open on caniuse.com", CAN_I_USE_URL + feature.id)
+        .row()
+        .url('Open in Web App', `${WEB_APP_URL}?startapp=${feature.id}`);
 
     const { supportPercent, partialSupportPercent, totalPercent } = getBrowserSupportPercent(feature);
     const percentString = partialSupportPercent ? `${supportPercent}% + ${partialSupportPercent}% = ${totalPercent}%` : `${supportPercent}%`;
@@ -59,7 +62,7 @@ function prepareSupportString(support: BrowserSupport = {}) {
 }
 
 export function prepareWebAppUrl(url: string) {
-    const base = new URL(WEB_APP_ESCAPE);
+    const base = new URL(WEB_APP_URL);
     base.searchParams.set('url', url);
     return base.toString();
 }
