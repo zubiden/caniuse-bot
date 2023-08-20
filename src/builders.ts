@@ -1,21 +1,31 @@
 import { InlineKeyboard, InlineQueryResultBuilder } from "grammy";
-import { BROWSER_MAP, BrowserSupport, Feature, getSupportInfo } from "./caniuse.ts";
+import removeMarkdown from "remove-markdown";
+import { BROWSER_MAP, BrowserSupport, Feature, getBrowserSupportPercent, getSupportInfo } from "./caniuse.ts";
 import { CAN_I_USE_URL, WEB_APP_ESCAPE } from "./config.ts";
 
 export function buildArticle(feature: Feature) {
-    const keyboard = new InlineKeyboard()
-        .url("Open on caniuse.com", CAN_I_USE_URL + feature.id);
+    const keyboard = new InlineKeyboard().url("Open on caniuse.com", CAN_I_USE_URL + feature.id);
+
+    const { supportPercent, partialSupportPercent, totalPercent } = getBrowserSupportPercent(feature);
+    const percentString = partialSupportPercent ? `${supportPercent}% + ${partialSupportPercent}% = ${totalPercent}%` : `${supportPercent}%`;
+
     return InlineQueryResultBuilder
-        .article(feature.id, feature.title, { description: feature.description, reply_markup: keyboard })
-        .text('', { message_text: buildMessage(feature), parse_mode: 'HTML' });
+        .article(feature.id, feature.title, {
+            description: `${percentString} • ${removeMarkdown(feature.description)}`,
+            reply_markup: keyboard,
+        }).text('', {
+            message_text: buildMessage(feature),
+            parse_mode: 'HTML',
+        });
 }
 
 function buildMessage(feature: Feature) {
     const title = `<b>${feature.title}</b>\n\n`;
     const supportInfo = getSupportInfo(feature);
+    const { supportPercent, partialSupportPercent } = getBrowserSupportPercent(feature);
 
-    const partialSupport = supportInfo.partialSupportPercent ? ` (${supportInfo.partialSupportPercent}% partial)` : '';
-    const percent = `Full support: <b>${supportInfo.supportPercent}%</b>${partialSupport}\n\n`;
+    const partialSupport = partialSupportPercent ? ` (${partialSupportPercent}% partial)` : '';
+    const percent = `Full support: <b>${supportPercent}%</b>${partialSupport}\n\n`;
 
     const desktop = Object.keys(supportInfo.desktop).map((browserKey) => {
         const browserName = BROWSER_MAP[browserKey];

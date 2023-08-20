@@ -86,6 +86,15 @@ export function search(query: string): Feature[] {
     }).filter(Boolean);
 }
 
+export function getBrowserSupportPercent(feature: Feature) {
+    const { usage_perc_a, usage_perc_y } = feature;
+    return {
+        supportPercent: usage_perc_y,
+        partialSupportPercent: usage_perc_a,
+        totalPercent: Math.floor((usage_perc_y + usage_perc_a) * 100) / 100,
+    }
+}
+
 export function getSupportInfo(feature: Feature) {
     const desktop = Object.keys(DESKTOP_BROWSER_MAP)
         .reduce((acc, browser) => {
@@ -108,8 +117,6 @@ export function getSupportInfo(feature: Feature) {
     return {
         desktop,
         mobile,
-        supportPercent: feature.usage_perc_y,
-        partialSupportPercent: feature.usage_perc_a,
     };
 }
 
