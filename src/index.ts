@@ -1,4 +1,4 @@
-import { Bot, GrammyError, InlineKeyboard } from "grammy";
+import { Bot, InlineKeyboard } from "grammy";
 import { BOT_TOKEN, CACHE_TIME, CAN_I_USE_URL, MINIMUM_QUERY_LENGTH, RESULT_LIMIT } from "./config.ts";
 import { search } from "./caniuse.ts";
 import { buildArticle, prepareWebAppUrl } from "./builders.ts";
@@ -25,7 +25,7 @@ bot.on("inline_query", async (ctx) => {
         ctx.answerInlineQuery(
             [],
             { cache_time: CACHE_TIME },
-        ).catch();
+        ).catch(() => {});
     }
 
     if (!query || query.length < MINIMUM_QUERY_LENGTH) {
@@ -55,6 +55,8 @@ bot.on("inline_query", async (ctx) => {
     );
 });
 
-bot.start();
+bot.start({
+    drop_pending_updates: true,
+});
 
 console.log(">>> Bot started");
