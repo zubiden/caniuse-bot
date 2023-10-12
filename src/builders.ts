@@ -1,7 +1,7 @@
 import { InlineKeyboard, InlineQueryResultBuilder } from "grammy";
 import removeMarkdown from "remove-markdown";
-import { BROWSER_MAP, BrowserSupport, Feature, getBrowserSupportPercent, getSupportInfo } from "./caniuse.js";
-import { CAN_I_USE_URL, WEB_APP_URL } from "./config.js";
+import { BROWSER_MAP, BrowserSupport, Feature, getBrowserSupportPercent, getSupportInfo } from "./caniuse.ts";
+import { CAN_I_USE_URL, WEB_APP_URL } from "./config.ts";
 
 export function buildArticle(feature: Feature) {
     const keyboard = new InlineKeyboard()

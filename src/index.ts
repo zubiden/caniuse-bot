@@ -1,7 +1,7 @@
 import { Bot, InlineKeyboard } from "grammy";
-import { BOT_TOKEN, CACHE_TIME, CAN_I_USE_URL, MINIMUM_QUERY_LENGTH, RESULT_LIMIT } from "./config.js";
-import { search } from "./caniuse.js";
-import { buildArticle, prepareWebAppUrl } from "./builders.js";
+import { BOT_TOKEN, CACHE_TIME, CAN_I_USE_URL, MINIMUM_QUERY_LENGTH, RESULT_LIMIT } from "./config.ts";
+import { search } from "./caniuse.ts";
+import { buildArticle, prepareWebAppUrl } from "./builders.ts";
 
 const bot = new Bot(BOT_TOKEN);
 
