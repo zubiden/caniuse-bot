@@ -1,4 +1,4 @@
-FROM node:18
+FROM node:20
 # Create app directory
 WORKDIR /usr/src/app
 # Install app dependencies
@@ -15,4 +15,4 @@ COPY . .
 ENV DO_UPDATE=true
 
 # Use a custom command to start the application
-CMD [ "sh", "-c", "if $DO_UPDATE; then npm update; fi && npm start" ]
+CMD [ "npm", "start" ]
