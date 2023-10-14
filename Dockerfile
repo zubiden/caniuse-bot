@@ -15,4 +15,4 @@ COPY . .
 ENV DO_UPDATE=true
 
 # Use a custom command to start the application
-CMD [ "npm", "start" ]
+CMD [ "npm", "run", "bootstrap" ]
