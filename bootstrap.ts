@@ -11,11 +11,11 @@ function startChildProcess() {
   child = spawn('npm', ['start'], { shell: true });
 
   child.stdout.on('data', (data) => {
-    console.log(data);
+    console.log(data.toString());
   });
 
   child.stderr.on('data', (data) => {
-    console.error(data);
+    console.error(data.toString());
   });
 
   child.on('close', (code) => {
