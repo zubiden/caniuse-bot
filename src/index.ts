@@ -24,7 +24,15 @@ bot.on("inline_query", async (ctx) => {
     function rejectQuery() {
         ctx.answerInlineQuery(
             [],
-            { cache_time: CACHE_TIME },
+            {
+                cache_time: CACHE_TIME,
+                button: {
+                    text: 'Open web app',
+                    web_app: {
+                        url: CAN_I_USE_URL,
+                    }
+                }
+            },
         ).catch(() => {});
     }
 
@@ -48,7 +56,7 @@ bot.on("inline_query", async (ctx) => {
             button: {
                 text: 'Open in web app',
                 web_app: {
-                    url: prepareWebAppUrl(CAN_I_USE_URL + features[0].id),
+                    url: CAN_I_USE_URL + features[0].id,
                 }
             }
         },
